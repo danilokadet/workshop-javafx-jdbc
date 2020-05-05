@@ -78,11 +78,10 @@ public class DepartmentFormController implements Initializable {
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 
-		} catch(ValidationExcepetion e) {
-			
+		} catch (ValidationExcepetion e) {
+
 			setErrorMessages(e.getErrors());
-		}
-		catch (DbException e) {
+		} catch (DbException e) {
 
 			Alerts.showAlert("Error saving objcet", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -148,17 +147,16 @@ public class DepartmentFormController implements Initializable {
 		txtId.setText(String.valueOf(entity.getId()));
 		txtId.setText(entity.getName());
 	}
-	
-	
+
 	private void setErrorMessages(Map<String, String> errors) {
-		
+
 		Set<String> fields = errors.keySet();
-		
-		if (fields.contains("name")){
-			
+
+		if (fields.contains("name")) {
+
 			labelErrorName.setText(errors.get("name"));
 		}
-		
+
 	}
 
 }
