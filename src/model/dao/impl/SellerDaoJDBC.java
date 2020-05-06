@@ -138,17 +138,20 @@ public class SellerDaoJDBC implements SellerDao {
 	}
 
 	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		
 		Seller obj = new Seller();
 		obj.setId(rs.getInt("Id"));
 		obj.setName(rs.getString("Name"));
 		obj.setEmail(rs.getString("Email"));
 		obj.setBaseSalary(rs.getDouble("BaseSalary"));
-		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setBirthDate(new java.util.Date(rs.getTimestamp("BirthDate").getTime()));
 		obj.setDepartment(dep);
+		
 		return obj;
 	}
 
 	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		
 		Department dep = new Department();
 		dep.setId(rs.getInt("DepartmentId"));
 		dep.setName(rs.getString("DepName"));
@@ -157,8 +160,10 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public List<Seller> findAll() {
+		
 		PreparedStatement st = null;
 		ResultSet rs = null;
+		
 		try {
 			st = conn.prepareStatement(
 					"SELECT seller.*,department.Name as DepName "
@@ -176,6 +181,7 @@ public class SellerDaoJDBC implements SellerDao {
 				Department dep = map.get(rs.getInt("DepartmentId"));
 				
 				if (dep == null) {
+					
 					dep = instantiateDepartment(rs);
 					map.put(rs.getInt("DepartmentId"), dep);
 				}
@@ -186,9 +192,11 @@ public class SellerDaoJDBC implements SellerDao {
 			return list;
 		}
 		catch (SQLException e) {
+			
 			throw new DbException(e.getMessage());
 		}
 		finally {
+			
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
@@ -196,8 +204,10 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public List<Seller> findByDepartment(Department department) {
+		
 		PreparedStatement st = null;
 		ResultSet rs = null;
+		
 		try {
 			st = conn.prepareStatement(
 					"SELECT seller.*,department.Name as DepName "
